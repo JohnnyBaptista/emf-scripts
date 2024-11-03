@@ -2,7 +2,6 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import dotenv from "dotenv";
 import { getModuleFederationPlugin } from "emf-webpack-plugins";
-// import { getProjectName } from "../../utils/getProjectName";
 
 dotenv.config({ path: "./.env" });
 
@@ -12,17 +11,18 @@ export default {
   entry: "./src/index.js",
   mode: "development",
   output: {
-    publicPath: process.env.PROJECT_URL || "${projectUrl}",
+    publicPath: "/",
     path: path.resolve(path.dirname(new URL(import.meta.url).pathname), "dist"),
   },
   devServer: {
     static: {
       directory: path.join(
         path.dirname(new URL(import.meta.url).pathname),
-        "dist"
+        "public" // Altere de "dist" para "public"
       ),
     },
     port: 3000,
+    historyApiFallback: true, // Certifique-se de que esta linha está presente
   },
   module: {
     rules: [

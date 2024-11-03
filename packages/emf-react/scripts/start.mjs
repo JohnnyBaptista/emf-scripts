@@ -11,7 +11,7 @@ process.on("unhandledRejection", (err) => {
   throw err;
 });
 
-(async () => {
+export default function start() {
   try {
     console.log(chalk.cyan("Building the application for production..."));
 
@@ -54,4 +54,4 @@ process.on("unhandledRejection", (err) => {
     console.error(chalk.red("Failed to build:", error));
     process.exit(1);
   }
-})();
+}

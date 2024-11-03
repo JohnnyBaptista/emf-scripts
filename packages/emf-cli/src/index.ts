@@ -5,7 +5,7 @@ import { importComponent } from "./commands/import";
 
 const program = new Command();
 
-program.name("emf").description("").version("0.1.0");
+program.name("emf-cli").description("").version("0.1.0");
 
 // Comando `init`
 program
@@ -16,6 +16,7 @@ program
   .option("-n, --name <projectName>", "Nome do projeto", "my-microfrontend-app") // Valor padrão: 'my-microfrontend-app'
   .option("-u, --url <projectUrl>", "URL do projeto", "http://localhost:3000/") // Valor padrão: 'http://localhost:3000/'
   .action((options) => {
+    console.log("entrou");
     const { name, url } = options;
     initProject(name, url); // Passa os parâmetros para a função initProject
   });

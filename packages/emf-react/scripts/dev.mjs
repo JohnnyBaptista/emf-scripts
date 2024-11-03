@@ -16,7 +16,7 @@ process.on("unhandledRejection", (err) => {
 const DEFAULT_PORT = 3000;
 const HOST = "localhost";
 
-(async () => {
+export default async function dev() {
   try {
     console.log(chalk.cyan("Starting the development server..."));
 
@@ -45,4 +45,4 @@ const HOST = "localhost";
     console.error(chalk.red("Failed to start the development server:", error));
     process.exit(1);
   }
-})();
+}

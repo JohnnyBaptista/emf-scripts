@@ -69,17 +69,21 @@ const createCRAPackageJson = (projectName, packageJsonPath, projectPath, project
     }
 };
 function initProject(projectName = "my-microfrontend-app", projectUrl = "http://localhost:3000/") {
-    const projectPath = process.cwd();
-    const packageJsonPath = path_1.default.join(projectPath, "package.json");
-    if (!fs_1.default.existsSync(packageJsonPath)) {
-        (0, child_process_1.execSync)("npm init -y", { stdio: "inherit" });
-    }
-    if (fs_1.default.existsSync(packageJsonPath)) {
-        createCRAPackageJson(projectName, packageJsonPath, projectPath, projectUrl);
-    }
-    else {
+    try {
+        const projectPath = process.cwd();
+        const packageJsonPath = path_1.default.join(projectPath, "package.json");
+        if (!fs_1.default.existsSync(packageJsonPath)) {
+            (0, child_process_1.execSync)(`mkdir ${projectName} && cd ${projectName} && npm init -y`, {
+                stdio: "inherit",
+            });
+        }
+        if (fs_1.default.existsSync(packageJsonPath)) {
+            createCRAPackageJson(projectName, packageJsonPath, projectPath, projectUrl);
+            return;
+        }
         console.log(`EMF Starting project: ${projectName}...`);
-        const packageJson = JSON.parse(fs_1.default.readFileSync(packageJsonPath, "utf-8"));
+        const projectDir = path_1.default.join(projectPath, projectName);
+        const packageJson = JSON.parse(fs_1.default.readFileSync(path_1.default.join(projectDir, "package.json"), "utf-8"));
         (0, child_process_1.execSync)("npm install react react-dom webpack webpack-cli webpack-dev-server babel-loader @babel/preset-react @babel/preset-env style-loader css-loader sass-loader html-webpack-plugin dotenv --save-dev", { stdio: "inherit" });
         packageJson.dependencies = {
             ...packageJson.dependencies,
@@ -106,45 +110,49 @@ function initProject(projectName = "my-microfrontend-app", projectUrl = "http://
             dev: "emf-react dev",
             build: "emf-react build",
         };
-        fs_1.default.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-        if (!fs_1.default.existsSync(path_1.default.join(projectPath, "src"))) {
-            fs_1.default.mkdirSync(path_1.default.join(projectPath, "src"));
+        console.log("Creating package.json file...");
+        fs_1.default.writeFileSync(path_1.default.join(projectDir, "package.json"), JSON.stringify(packageJson, null, 2));
+        if (!fs_1.default.existsSync(path_1.default.join(projectDir, "src"))) {
+            console.log("Creating src folder...");
+            fs_1.default.mkdirSync(path_1.default.join(projectDir, "src"));
         }
-        if (!fs_1.default.existsSync(path_1.default.join(projectPath, "src/components"))) {
-            fs_1.default.mkdirSync(path_1.default.join(projectPath, "src/components"));
+        if (!fs_1.default.existsSync(path_1.default.join(projectDir, "src/components"))) {
+            console.log("Creating src/compoennts folder...");
+            fs_1.default.mkdirSync(path_1.default.join(projectDir, "src/components"));
         }
-        if (!fs_1.default.existsSync(path_1.default.join(projectPath, "public"))) {
-            fs_1.default.mkdirSync(path_1.default.join(projectPath, "public"));
+        if (!fs_1.default.existsSync(path_1.default.join(projectDir, "public"))) {
+            console.log("Creating public folder...");
+            fs_1.default.mkdirSync(path_1.default.join(projectDir, "public"));
         }
         // Create the Button.js component
-        fs_1.default.writeFileSync(path_1.default.join(projectPath, "src/components", "Button.js"), exports.BUTTON_COMPONENT);
-        fs_1.default.writeFileSync(path_1.default.join(projectPath, "src", "index.js"), `
-        import React from 'react';
-        import ReactDOM from 'react-dom';
-        import Button from './components/Button';
-
-        const App = () => (
-          <div>
-            Hello from Webpack + Module Federation!
-            <Button onClick={() => alert('Button clicked!')}>Click Me!</Button>
-          </div>
-        );
-
-        ReactDOM.render(<App />, document.getElementById('root'));
-      `);
-        fs_1.default.writeFileSync(path_1.default.join(projectPath, "public", "index.html"), `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${projectName}</title>
-        </head>
-        <body>
-          <div id="root"></div>
-        </body>
-        </html>
-      `);
+        fs_1.default.writeFileSync(path_1.default.join(projectDir, "src/components", "Button.js"), exports.BUTTON_COMPONENT);
+        fs_1.default.writeFileSync(path_1.default.join(projectDir, "src", "index.js"), `
+          import React from 'react';
+          import ReactDOM from 'react-dom';
+          import Button from './components/Button';
+  
+          const App = () => (
+            <div>
+              Hello from Webpack + Module Federation!
+              <Button onClick={() => alert('Button clicked!')}>Click Me!</Button>
+            </div>
+          );
+  
+          ReactDOM.render(<App />, document.getElementById('root'));
+        `);
+        fs_1.default.writeFileSync(path_1.default.join(projectDir, "public", "index.html"), `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${projectName}</title>
+          </head>
+          <body>
+            <div id="root"></div>
+          </body>
+          </html>
+        `);
         // fs.writeFileSync(path.join(projectPath, ".env"), DEFAULT_ENV(projectUrl));
         // const updatedWebpackConfig = getWebpackConfig(projectName, projectUrl);
         // // Add the Button component to Module Federation
@@ -154,5 +162,8 @@ function initProject(projectName = "my-microfrontend-app", projectUrl = "http://
         // );
         // saveWebpackConfig(finalWebpackConfig);
         console.log(`Project ${projectName} successfully created and configured with Webpack, Module Federation, and the Button component exposed!`);
+    }
+    catch (error) {
+        throw Error(`Error initializing project:\n${error}`);
     }
 }
