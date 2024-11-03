@@ -1,0 +1,12 @@
+{
+  "name": "emf-register",
+  "version": "1.0.0",
+  "description": "Handle module federated component registring",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

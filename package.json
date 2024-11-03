@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "bin": {
     "emf-scripts": "./bin/emf-scripts"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./packages/react/scripts/dev.js"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "dotenv": "^16.4.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
