@@ -8,7 +8,7 @@ import {
 } from "../utils/webpackConfig";
 
 export const DEFAULT_ENV = (projectUrl: string) => `
-# URL base do projeto
+# Base URL of the project
 PROJECT_URL=${projectUrl}
 `;
 
@@ -58,7 +58,7 @@ const createCRAPackageJson = (
 
   if (packageJson.dependencies && packageJson.dependencies["react-scripts"]) {
     console.log(
-      `Projeto CRA detectado. Configurando ${projectName} para usar react-app-rewired...`
+      `CRA project detected. Configuring ${projectName} to use react-app-rewired...`
     );
 
     execSync("npm install react-app-rewired --save-dev", {
@@ -82,7 +82,7 @@ const createCRAPackageJson = (
     fs.writeFileSync(path.join(projectPath, ".env"), DEFAULT_ENV(projectUrl));
 
     console.log(
-      `Projeto CRA configurado com sucesso com react-app-rewired e Module Federation!`
+      `CRA project successfully configured with react-app-rewired and Module Federation!`
     );
   }
 };
@@ -101,7 +101,7 @@ export function initProject(
   if (fs.existsSync(packageJsonPath)) {
     createCRAPackageJson(projectName, packageJsonPath, projectPath, projectUrl);
   } else {
-    console.log(`EMF Iniciando projeto: ${projectName}...`);
+    console.log(`EMF Starting project: ${projectName}...`);
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 
     execSync(
@@ -132,9 +132,9 @@ export function initProject(
     };
 
     packageJson.scripts = {
-      start: "emf-scripts start",
-      dev: "emf-scripts dev",
-      build: "emf-scripts build",
+      start: "emf-react start",
+      dev: "emf-react dev",
+      build: "emf-react build",
     };
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
@@ -151,7 +151,7 @@ export function initProject(
       fs.mkdirSync(path.join(projectPath, "public"));
     }
 
-    // Cria o componente Button.js
+    // Create the Button.js component
     fs.writeFileSync(
       path.join(projectPath, "src/components", "Button.js"),
       BUTTON_COMPONENT
@@ -196,7 +196,7 @@ export function initProject(
 
     // const updatedWebpackConfig = getWebpackConfig(projectName, projectUrl);
 
-    // // Adiciona o componente Button ao Module Federation
+    // // Add the Button component to Module Federation
     // const finalWebpackConfig = updatedWebpackConfig.replace(
     //   "exposes: {},",
     //   "exposes: { './Button': './src/components/Button' },"
@@ -205,7 +205,7 @@ export function initProject(
     // saveWebpackConfig(finalWebpackConfig);
 
     console.log(
-      `Projeto ${projectName} criado e configurado com sucesso com Webpack, Module Federation e o componente Button exposto!`
+      `Project ${projectName} successfully created and configured with Webpack, Module Federation, and the Button component exposed!`
     );
   }
 }

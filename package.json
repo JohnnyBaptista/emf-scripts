@@ -4,12 +4,10 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "bin": {
-    "emf-scripts": "./bin/emf-scripts"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./packages/react/scripts/dev.js"
+    "start": "cd packages/emf-react && npm start",
+    "dev": "cd packages/emf-react && npm run dev"
   },
   "keywords": [],
   "author": "",
